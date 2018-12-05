@@ -3,11 +3,9 @@ package carda.ulexia;
 
 class Block {
     String filename;
-    String filetext;
 
-    Block(String filename, String filetext) {
+    Block(String filename) {
         this.filename = filename;
-        this.filetext = filetext;
     }
 
 
