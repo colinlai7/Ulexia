@@ -15,20 +15,30 @@
 
         <Button
             android:id="@+id/pButton"
-            android:layout_width="match_parent"
+            android:layout_width="318dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="6dp"
-            android:layout_marginRight="6dp"
             android:layout_marginTop="0dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginRight="50dp"
             android:background="@android:color/transparent"
             android:scrollHorizontally="true"
             android:textAlignment="viewStart"
             android:textSize="36sp"
             android:textStyle="bold"
             tools:textAllCaps="false" />
+
+        <ImageButton
+            android:id="@+id/rButton"
+            android:layout_width="51dp"
+            android:layout_height="51dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_remove_circle_black_24dp_big" />
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

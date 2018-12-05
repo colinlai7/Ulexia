@@ -1,5 +1,6 @@
 package carda.ulexia;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,8 +29,8 @@ public class InsertView extends AppCompatActivity {
     EditText mEditText;
     EditText mEditName;
 
-    public List<String> names;
-    public List<String> texts;
+//    public List<String> names;
+//    public List<String> texts;
 
 
 
@@ -42,8 +43,8 @@ public class InsertView extends AppCompatActivity {
         mEditName = findViewById(R.id.edit_name);
 
         Intent intent = getIntent();
-        names = getIntent().getStringArrayListExtra("names");
-        texts = getIntent().getStringArrayListExtra("texts");
+//        names = getIntent().getStringArrayListExtra("names");
+//        texts = getIntent().getStringArrayListExtra("texts");
 //        button = (Button) findViewById(R.id.button_start);
 //        button.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -61,15 +62,41 @@ public class InsertView extends AppCompatActivity {
         String filename = mEditName.getText().toString();
 //        FILE_NAME = filename + ".txt";
 
-        // instead of save
-        // save to names arraylist for intent
-        names.add(filename);
-        texts.add(text);
-        // load home view
-        Intent intent = new Intent(this, HomeView.class);
-        intent.putStringArrayListExtra("names", (ArrayList<String>) names);
-        intent.putStringArrayListExtra("texts", (ArrayList<String>) texts);
-        startActivity(intent);
+
+        // TRY REAL SAVE
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(text.getBytes());
+            outputStream.close();
+            Toast.makeText(this, "Saved to: " + getFilesDir() + "/" + filename, Toast.LENGTH_LONG).show();
+
+            // instead of save
+            // save to names arraylist for intent
+//            names.add(filename);
+//            texts.add(text);
+            // load home view
+            Intent intent = new Intent(this, HomeView.class);
+//            intent.putStringArrayListExtra("names", (ArrayList<String>) names);
+//            intent.putStringArrayListExtra("texts", (ArrayList<String>) texts);
+            startActivity(intent);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // END TRY REAL SAVE
+
+
+//        // instead of save
+//        // save to names arraylist for intent
+//        names.add(filename);
+//        texts.add(text);
+//        // load home view
+//        Intent intent = new Intent(this, HomeView.class);
+//        intent.putStringArrayListExtra("names", (ArrayList<String>) names);
+//        intent.putStringArrayListExtra("texts", (ArrayList<String>) texts);
+//        startActivity(intent);
 
         // added: save user input to a file in homeview
 //        FileOutputStream fos = null;

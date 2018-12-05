@@ -11,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,6 +36,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.BlockViewHolder> {
         CardView cv;
 
         Button pButton;
+        ImageButton rButton;
 //        String pText;
         //
 //        TextView filename;
@@ -44,6 +48,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.BlockViewHolder> {
             cv = (CardView)itemView.findViewById(R.id.cv);
 //            pText =
             pButton = (Button)itemView.findViewById(R.id.pButton);
+            rButton = (ImageButton)itemView.findViewById(R.id.rButton);
         }
     }
 
@@ -70,8 +75,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.BlockViewHolder> {
     @Override
     public void onBindViewHolder(BlockViewHolder blockViewHolder, int i) {
         final String name = blocks.get(i).filename;
-        final String text = blocks.get(i).filetext;
+//        final String text = blocks.get(i).filetext;
         blockViewHolder.pButton.setText(name);
+
 
         // block variables
 
@@ -79,54 +85,73 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.BlockViewHolder> {
             @Override
             public void onClick(View view){
                 // load file
-                String textcontent = text;
-                Log.d("myTag", "button clicked");
+//                String textcontent = text;
+                Log.d("myTag", "pbutton clicked");
                 Log.d("myTag", name);
-                Log.d("myTag", text);
-//                FileInputStream fis = null;
-//
-//                try {
-//                    fis = InsertView.openFileInput(name);
-//                    InputStreamReader isr = new InputStreamReader(fis);
-//                    BufferedReader br = new BufferedReader(isr);
-//                    StringBuilder sb = new StringBuilder();
-//                    String text;
-//
-//                    while ((text = br.readLine()) != null) {
-//                        sb.append(text).append("\n");
-//                    }
-//
-////                    mEditText.setText(sb.toString());
-//                    textcontent = sb.toString();
-//
-//                    Log.d("myTag", textcontent);
-////                    blockViewHolder.pName.setText(textcontent);
-//
-//                } catch (FileNotFoundException e) {
-//                    Log.d("myTag", "caught1");
-//
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    Log.d("myTag", "caught2");
-//
-//                    e.printStackTrace();
-//                } finally {
-//                    if (fis != null) {
-//                        try {
-//                            fis.close();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-                // end load file
+//                Log.d("myTag", text);
+                FileInputStream fis = null;
 
-                Intent intent = new Intent(context, CardaView.class);
-                intent.putExtra("textcontent", textcontent);
-//                Log.d("myTag", "made past here");
-                context.startActivity(intent);
+//        FileInputStream fis = null;
+//
+                try {
+                    fis = context.openFileInput(name);
+                    InputStreamReader isr = new InputStreamReader(fis);
+                    BufferedReader br = new BufferedReader(isr);
+                    StringBuilder sb = new StringBuilder();
+                    String text;
+
+                    while ((text = br.readLine()) != null) {
+                        sb.append(text).append("\n");
+                    }
+//                    Toast.makeText(this, "Loaded: " + sb.toString(), Toast.LENGTH_LONG).show();
+
+//                    mEditText.setText(sb.toString());
+                    Log.d("myTag", "worked");
+                    Log.d("myTag", "Filename: " + name);
+                    Log.d("myTag", "Sb string: " + sb.toString());
+
+                    Intent intent = new Intent(context, CardaView.class);
+                    intent.putExtra("textcontent", sb.toString());
+                    Log.d("myTag", "created intent inside try");
+                    context.startActivity(intent);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    Log.d("myTag", "caught2");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.d("myTag", "caught3");
+                } finally {
+                    if (fis != null) {
+                        try {
+                            fis.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
             }
         });
+
+        blockViewHolder.rButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Log.d("myTag", "rbutton clicked");
+
+                try {
+                    // remove file and reload homeview activity
+                    context.deleteFile(name);
+
+                    Intent intent = new Intent(context, HomeView.class);
+                    context.startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("myTag", "problem removing file name: " + name);
+                }
+
+            }
+        });
+
     }
 
     @Override
